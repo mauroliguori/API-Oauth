@@ -20,6 +20,8 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed'
+            
+            
         ]);
 
         if($validation->fails())
@@ -48,6 +50,23 @@ class UserController extends Controller
         
         
     }
+
+    public function CambiarContra(Request $request){
+        $user = $request->user();
+        if(Hash::check($request -> post("contrasena_actual")==$user->password)){
+            $validation = Validator::make($request->all(),[
+            'password' => 'required|confirmed'
+
+            ]);
+
+            if($validation->fails())
+                return $validation->errors();
+            $user -> password = Hash::make($request -> post("password"));
+            $user -> save();
+        }
+        
+    }
+
 
     
 }

@@ -21,6 +21,6 @@ Route::prefix('v1')->group(function ()
     Route::post('/user',[UserController::class,"Register"]);
     Route::get('/validate',[UserController::class,"ValidateToken"])->middleware('auth:api');
     Route::get('/logout',[UserController::class,"Logout"])->middleware('auth:api');
-
+    Route::post('/cambiarpass',[UserController::class,"CambiarContra"])->middleware('auth:api');
 
 });
