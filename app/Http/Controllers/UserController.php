@@ -46,25 +46,29 @@ class UserController extends Controller
 
     public function Logout(Request $request){
         $request->user()->token()->revoke();
-        return ['message' => 'Token Revoked'];
+        return ['mensaje' => 'Token rebocado'];
         
         
     }
 
     public function CambiarContra(Request $request){
         $user = $request->user();
-        if(Hash::check($request -> post("contrasena_actual")==$user->password)){
+        if(Hash::check($request -> post("contrasena_actual"),$user->password)){
             $validation = Validator::make($request->all(),[
             'password' => 'required|confirmed'
-
             ]);
 
             if($validation->fails())
                 return $validation->errors();
             $user -> password = Hash::make($request -> post("password"));
             $user -> save();
+            return response()->json(["mensaje"=>"Contraseña cambiada con exito!"]);
         }
-        
+        return response()->json(["mensaje"=>"Contraseña actual no valida."]);
+    }
+
+    public function Find(Request $request, $idUsuario){
+        return $tarea = User::FindOrFail($idUsuario);
     }
 
 
