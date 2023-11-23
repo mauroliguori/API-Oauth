@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Lcobucci\JWT\Parser;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Http;
 
 
 
@@ -37,6 +37,9 @@ class UserController extends Controller
         $user -> email = $request -> post("email");
         $user -> password = Hash::make($request -> post("password"));   
         $user -> save();
+        
+        $this -> enviarNotificacionPorEmail("JefeSupremo@email.com", "¡Bienvenido {$user->name}!, tu usuario se creo correctamente!", $user->email, "Estoy contento de que formes parte de este mundillo, divertita pa");
+
         return $user;
     }
 
@@ -70,6 +73,22 @@ class UserController extends Controller
     public function Find(Request $request, $idUsuario){
         return $tarea = User::FindOrFail($idUsuario);
     }
+
+    private function enviarNotificacionPorEmail($from, $subjet, $to, $body){
+        $response = Http::withHeaders([
+            "Accept" => "application/json",
+            "Content-Type" => "application/json"
+        ])-> post("mail-api.tareas-namespace.svc.cluster.local",[
+            "from"=> $from,
+           "subject"=> $subjet,
+          	"to"=> $to,
+            "body"=> $body
+
+        ]);
+
+
+
+    }  
 
 
     
