@@ -38,7 +38,7 @@ class UserController extends Controller
         $user -> password = Hash::make($request -> post("password"));   
         $user -> save();
         
-        $this -> enviarNotificacionPorEmail("JefeSupremo@email.com", "¡Bienvenido {$user->name}!, tu usuario se creo correctamente!", $user->email, "Estoy contento de que formes parte de este mundillo, divertita pa");
+         $this -> enviarNotificacionPorEmail("JefeSupremo@email.com", "¡Bienvenido {$user->name}!, tu usuario se creo correctamente!", $user->email, "Estoy contento de que formes parte de este mundillo, divertita pa");
 
         return $user;
     }
@@ -75,10 +75,10 @@ class UserController extends Controller
     }
 
     private function enviarNotificacionPorEmail($from, $subjet, $to, $body){
-        $response = Http::withHeaders([
+         $response = Http::withHeaders([
             "Accept" => "application/json",
             "Content-Type" => "application/json"
-        ])-> post("mail-api.tareas-namespace.svc.cluster.local",[
+        ])-> post("mail-api.tareas-namespace.svc.cluster.local/api/enviar",[
             "from"=> $from,
            "subject"=> $subjet,
           	"to"=> $to,
